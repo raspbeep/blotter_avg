@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:blotter_avg/dashboard_window.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -245,17 +245,26 @@ class _ImageWindowState extends State<ImageWindow> {
   }
 
   void _onKey(KeyEvent event) {
+    debugPrint("Key event: ${event.logicalKey}");
     if (rectStartPx == null || rectEndPx == null) return;
 
     final key = event.logicalKey;
-    if (!(key == LogicalKeyboardKey.arrowLeft ||
-        key == LogicalKeyboardKey.arrowRight ||
-        key == LogicalKeyboardKey.arrowUp ||
-        key == LogicalKeyboardKey.arrowDown)) {
-      return;
-    }
-
     if (event is KeyDownEvent) {
+      if (key == LogicalKeyboardKey.keyP) {
+        debugPrint("P pressed, computing mean");
+        final mean = computeMeanOfRect();
+        if (mean != null) {
+          DashboardWindow.appendText?.call(mean.toStringAsFixed(2));
+        }
+        return;
+      }
+      if (!(key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.arrowUp ||
+          key == LogicalKeyboardKey.arrowDown)) {
+        return;
+      }
+
       bool wasEmpty = _arrowKeysHeld.isEmpty;
       _arrowKeysHeld.add(key);
       if (wasEmpty && _arrowKeysHeld.isNotEmpty) {
@@ -370,6 +379,7 @@ class _ImageWindowState extends State<ImageWindow> {
                         LogicalKeyboardKey.arrowRight,
                         LogicalKeyboardKey.arrowUp,
                         LogicalKeyboardKey.arrowDown,
+                        LogicalKeyboardKey.keyP,
                       ].contains(event.logicalKey)) {
                         _onKey(event);
                         return KeyEventResult.handled;

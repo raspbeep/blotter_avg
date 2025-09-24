@@ -1,5 +1,6 @@
+import 'package:blotter_avg/dashboard_window.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/dashboard_window.dart';
+
 import 'image_window.dart';
 
 void main() {

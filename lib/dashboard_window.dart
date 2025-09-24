@@ -1,8 +1,40 @@
+import 'package:blotter_avg/image_window.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/image_window.dart';
 
-class DashboardWindow extends StatelessWidget {
+class DashboardWindow extends StatefulWidget {
   const DashboardWindow({super.key});
+
+  static void Function(String)? appendText;
+
+  @override
+  State<DashboardWindow> createState() => _DashboardWindowState();
+}
+
+class _DashboardWindowState extends State<DashboardWindow> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    DashboardWindow.appendText = (String text) {
+      if (controller.text.isEmpty) {
+        controller.text = text;
+      } else {
+        controller.text += '\n$text';
+      }
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
+      setState(() {});
+    };
+  }
+
+  @override
+  void dispose() {
+    if (DashboardWindow.appendText != null) DashboardWindow.appendText = null;
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,40 +44,35 @@ class DashboardWindow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 30),
-          Center(
-            child: Text(
-              "Dashboard",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const Divider(),
           ElevatedButton.icon(
             icon: const Icon(Icons.folder_open),
             label: const Text("Open Image"),
             onPressed: () {
-              // We'll trigger file picker from the image window, or use a callback
               ImageWindow.openImageFile?.call();
             },
           ),
-          // const SizedBox(height: 20),
-          // IconButton(
-          //   icon: const Icon(Icons.crop),
-          //   onPressed: () {
-          //     ImageWindow.openImageFile?.call();
-          //     ImageWindow.focusNode?.requestFocus(); // ADD THIS
-          //   },
-          //   focusNode: FocusNode(canRequestFocus: false),
-          // ),
-          // IconButton(
-          //   icon: const Icon(Icons.brush),
-          //   onPressed: () {
-          //     ImageWindow.openImageFile?.call();
-          //     ImageWindow.focusNode?.requestFocus(); // ADD THIS
-          //   },
-          //   focusNode: FocusNode(canRequestFocus: false),
-          // ),
-          // Add more tools as needed
-          const Spacer(),
+          const SizedBox(height: 16),
+          // This Expanded makes the TextField fill vertical space
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                controller: controller,
+                maxLines: null,
+                expands: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(),
+                  labelText: 'Values',
+                ),
+                style: const TextStyle(fontFamily: 'monospace', fontSize: 15),
+                readOnly: false,
+                textAlign: TextAlign.left,
+                textAlignVertical: TextAlignVertical.top,
+              ),
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text("Blotter Pixel AVG", textAlign: TextAlign.center),
