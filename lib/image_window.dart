@@ -160,7 +160,7 @@ class _ImageWindowState extends State<ImageWindow> {
   }
 
   Widget buildDragHandle(Offset pxPos, int idx) {
-    const double size = 16;
+    const double size = 6;
     Offset shownPos = _imagePixelToWidget(pxPos);
     return Positioned(
       left: shownPos.dx - size / 2,
