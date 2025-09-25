@@ -3,6 +3,8 @@
 
 Blotter AVG is a lightweight, cross-platform desktop tool inspired by ImageJ, designed for quickly loading and analyzing 16-bit TIFF images (e.g., Western blot data). It enables users to select and drag rectangles over images to compute the average (mean) pixel value, streamlining quantitative analysis for scientific data.
 
+![Alt text](images/image.png "Blotter AVG screenshot of analysis of Western Blot data")
+
 ## Features
 
 - Open and View: Easily open .tif, .tiff, .png, or .jpg images via drag-and-drop or the "Open Image" button.
